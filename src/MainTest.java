@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class MainTester {
-
+public class MainTest {
     @Test
     @DisplayName("result of 8 elements")
     public void test1() {
@@ -23,7 +22,7 @@ public class MainTester {
     public void test2() {
         int[] insertions = { 1, 2, 10, 4, 5, 6, 1, 2 };
         BinomialHeap bh = BinomialHeapUtils.createBinomialHeapFromInsertions(insertions);
-        BinomialHeap.HeapItem it1 = bh.insert(0, null);
+        BinomialHeap.HeapItem it1 = bh.insert(1, null);
         BinomialHeap.HeapItem it2 = bh.insert(1, null);
         bh.delete(it2);
         bh.delete(it1);
@@ -98,23 +97,20 @@ public class MainTester {
     public void test9() {
         int n = 300;
         LinkedList<BinomialHeap.HeapItem> items = new LinkedList<>();
-        LinkedList<Integer> items2 = new LinkedList<>();
         BinomialHeap bh = new BinomialHeap();
         for (int m = 0; m < n; m++) {
             int op = 1;
 
             // There is at least one element in the heap
-            if (items.size() > 0) {
+            if (!items.isEmpty()) {
                 Random rd = new Random();
                 op = rd.nextInt(2);
             }
             if (op == 1) {
                 items.add(bh.insert(m, null));
-                items2.add(items.getLast().key);
             } else {
                 bh.deleteMin();
                 items.removeFirst();
-                items2.removeFirst();
             }
             Assertions.assertEquals(items.size(), bh.size(),
                     "Size should be " + items.size());
@@ -235,9 +231,8 @@ public class MainTester {
         Assertions.assertNotNull(bh.last);
         Assertions.assertEquals("0", bh.min.item.info, "Min is not updated");
         Assertions.assertEquals("0", bh.last.item.info, "Last is not updated");
-        bh.printHeap();
         bh.deleteMin();
-        Assertions.assertTrue(bh.size() == 0, "The tree size should be 0");
+		Assertions.assertEquals(0, bh.size(), "The tree size should be 0");
 
         bh.insert(1, "0");
         BinomialHeap.HeapItem x = bh.insert(2, "1");
@@ -255,7 +250,6 @@ public class MainTester {
         bh.delete(x);
         Assertions.assertNotNull(bh.min);
         Assertions.assertNotNull(bh.last);
-        bh.printHeap();
         Assertions.assertEquals(1, bh.numTrees());
         Assertions.assertEquals(2, bh.size());
         Assertions.assertSame(bh.last, bh.last.next);
@@ -292,7 +286,6 @@ public class MainTester {
         bh.insert(5, null);
         bh.insert(0, null);
         bh.insert(7, null);
-        bh.printHeap();
 
         Assertions.assertNotNull(bh.min);
         Assertions.assertNotNull(bh.last);
@@ -319,7 +312,6 @@ public class MainTester {
 
         Assertions.assertEquals(0, bh.min.item.key);
         bh.deleteMin();
-        bh.printHeap();
         Assertions.assertEquals(1, bh.min.item.key);
         Assertions.assertEquals(5, bh.last.next.item.key);
         Assertions.assertEquals(1, bh.last.next.rank);
@@ -331,7 +323,6 @@ public class MainTester {
         Assertions.assertEquals(2, bh.last.rank);
 
         bh.insert(10, null);
-        bh.printHeap();
         Assertions.assertEquals(3, bh.numTrees());
         Assertions.assertEquals(10, bh.last.next.item.key);
         Assertions.assertEquals(0, bh.last.next.rank);
@@ -339,16 +330,13 @@ public class MainTester {
         Assertions.assertSame(bh.last, bh.last.next.next.next);
 
         bh.deleteMin();
-        bh.printHeap();
         Assertions.assertEquals(2, bh.min.item.key);
 
         bh.deleteMin();
-        bh.printHeap();
         Assertions.assertEquals(2, bh.min.item.key);
 
         bh.deleteMin();
         Assertions.assertEquals(3, bh.min.item.key);
-        bh.printHeap();
 
         Assertions.assertEquals(1, bh.numTrees());
         Assertions.assertEquals(2, bh.last.rank);
@@ -398,27 +386,15 @@ public class MainTester {
         Assertions.assertEquals(0, bh.last.child.next.rank);
         Assertions.assertEquals(2, bh.min.item.key);
 
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
 
         Assertions.assertEquals(3, bh.min.item.key);
 
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
-        Assertions.assertDoesNotThrow(() -> {
-            bh.deleteMin();
-        }, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
+        Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
 
         Assertions.assertEquals(0, bh.size());
         Assertions.assertEquals(0, bh.numTrees());
@@ -438,9 +414,7 @@ public class MainTester {
             Assertions.assertEquals(i, bh.last.item.key);
             Assertions.assertEquals(0, bh.last.rank);
             Assertions.assertSame(bh.last, bh.last.next);
-            Assertions.assertDoesNotThrow(() -> {
-                bh.deleteMin();
-            }, "delete min resulted into an exception");
+            Assertions.assertDoesNotThrow(bh::deleteMin, "delete min resulted into an exception");
         }
     }
 
